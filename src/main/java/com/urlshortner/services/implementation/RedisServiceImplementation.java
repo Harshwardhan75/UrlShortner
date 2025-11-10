@@ -14,6 +14,7 @@ public class RedisServiceImplementation implements RedisService {
 
     @Override
     public void cacheURL(URL url) {
+        System.out.println("Updating Cache");
         urlCache.cacheURL(url);
     }
 

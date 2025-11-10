@@ -2,13 +2,10 @@ server:
   port: 8012
   address: 0.0.0.0
 spring:
-  config:
-    activate:
-      on-profile: default
   datasource:
-    url: jdbc:mysql://localhost:3306/urlshortner?createDatabaseIfNotExist=true
-    username: root
-    password: harshwardhan
+    url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DB}?createDatabaseIfNotExist=true
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -21,16 +18,16 @@ spring:
 
   data:
     redis:
-      host: localhost
-      port: 6379
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
 
   kafka:
     producer:
-      bootstrap-servers: localhost:9092
+      bootstrap-servers: ${KAFKA_BROKER}
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
-      bootstrap-servers: localhost:9092
+      bootstrap-servers: ${KAFKA_BROKER}
       group-id: GROUP-1
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -40,4 +37,4 @@ spring:
     listener:
       auto-startup: true
 
-topicName: TOPIC-URL
+topicName: ${KAFKA_TOPIC}

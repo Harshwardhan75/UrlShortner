@@ -7,12 +7,14 @@ import com.urlshortner.services.AnalyticsService;
 import com.urlshortner.services.RedisService;
 import com.urlshortner.services.UrlService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Base64;
 
+@Slf4j
 @Service
 public class UrlServiceImplementation implements UrlService {
 
@@ -73,6 +75,7 @@ public class UrlServiceImplementation implements UrlService {
 
         String agent = request.getHeader("User-Agent");
         boolean status = analyticsService.addAnalytics(url,agent);
+        System.out.println("Analytics Status***********: "+status);
         String result = url.getOriginalUrl();
         return result;
     }

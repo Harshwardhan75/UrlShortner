@@ -30,8 +30,8 @@ public class AnalyticsServiceImplementation implements AnalyticsService {
         analytics.setDevice(device);
         analytics.setAccessTime(LocalDateTime.now());
 
-        kafkaService.push(analytics);
-
+        boolean status = kafkaService.push(analytics);
+        System.out.println("Kafka Producer Status***********: "+status);
         return true;
     }
 
@@ -44,6 +44,11 @@ public class AnalyticsServiceImplementation implements AnalyticsService {
     @Override
     public Analytics saveAnalytics(Analytics analytics){
         return this.analyticsRepository.save(analytics);
+    }
+
+    @Override
+    public void batchUpdate(List<Analytics> logs) {
+        analyticsRepository.saveAll(logs);
     }
 
     private String generateDevice(String agent) {

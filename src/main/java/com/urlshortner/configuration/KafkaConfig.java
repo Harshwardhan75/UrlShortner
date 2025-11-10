@@ -1,6 +1,5 @@
 package com.urlshortner.configuration;
 
-import jakarta.validation.Valid;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -12,8 +11,9 @@ public class KafkaConfig {
 
     @Value("${topicName}")
     private String topicName;
+
     @Bean
-    public NewTopic topic(){
+    public NewTopic topic() {
         return TopicBuilder
                 .name(topicName)
                 .build();

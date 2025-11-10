@@ -12,4 +12,6 @@ public interface AnalyticsService {
     List<Analytics> getAnalytics(int urlId);
 
     Analytics saveAnalytics(Analytics analytics);
+
+    void batchUpdate(List<Analytics> logs);
 }
