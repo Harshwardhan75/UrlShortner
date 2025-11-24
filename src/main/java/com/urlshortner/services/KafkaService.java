@@ -6,8 +6,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 
 public interface KafkaService {
 
-    public boolean push(Analytics analytics);
-
+    boolean push(Analytics analytics);
 
     @KafkaListener()
     void update(Analytics analytics);

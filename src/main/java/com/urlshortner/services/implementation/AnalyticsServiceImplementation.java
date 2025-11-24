@@ -31,7 +31,7 @@ public class AnalyticsServiceImplementation implements AnalyticsService {
         analytics.setAccessTime(LocalDateTime.now());
 
         boolean status = kafkaService.push(analytics);
-        System.out.println("Kafka Producer Status***********: "+status);
+//        System.out.println("Kafka Producer Status***********: "+status);
         return true;
     }
 

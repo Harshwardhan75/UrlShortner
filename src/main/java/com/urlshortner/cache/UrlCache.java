@@ -23,7 +23,7 @@ public class UrlCache {
             redisTemplate.opsForHash().put(KEY, url.getShortenUrl(), url);
             redisTemplate.expire(KEY, 5, TimeUnit.MINUTES);
         } catch (Exception e) {
-            System.out.println("Exception ******************"+e.toString());
+//            System.out.println("Exception ******************"+e.toString());
         }
     }
 
@@ -35,8 +35,8 @@ public class UrlCache {
             URL url = (URL) redisTemplate.opsForHash().get(KEY,shortUrl);
             return url;
         }catch (Exception e){
-            System.out.println("Error Aya hain ************************************");
-            System.out.println(e.toString());
+//            System.out.println("Error Aya hain ************************************");
+//            System.out.println(e.toString());
             return null;
         }
 //        System.out.println("Redis get took: " + (System.currentTimeMillis() - start) + " ms");
@@ -49,7 +49,7 @@ public class UrlCache {
         try {
             redisTemplate.opsForHash().delete(KEY, shortUrl);
         } catch (Exception e) {
-            System.out.println("Exception ******************* "+e.toString());
+//            System.out.println("Exception ******************* "+e.toString());
         }
     }
 }

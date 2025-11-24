@@ -29,17 +29,10 @@ public class KafkaServiceImplementation implements KafkaService {
     @Override
     public boolean push(Analytics analytics) {
         try {
-            kafkaTemplate.send(topicName, analytics)
-                    .whenComplete((result, ex) -> {
-                        if (ex != null) {
-                            System.out.println("Message failed to produce: " + ex.getMessage());
-                        } else {
-                            System.out.println("Message produced successfully: " + analytics);
-                        }
-                    });
+            kafkaTemplate.send(topicName, analytics);
             return true;
         } catch (Exception e) {
-            System.out.println("Kafka Push Error: "+e.toString());
+//            System.out.println("Kafka Push Error: "+e.toString());
             return false;
         }
     }
@@ -51,7 +44,7 @@ public class KafkaServiceImplementation implements KafkaService {
 //        analytics = analyticsService.saveAnalytics(analytics);
 //        urlService.updateURL(analytics.getUrl().getUrlId());
         logs.add(analytics);
-        System.out.println(logs);
+//        System.out.println(logs);
     }
 
     @Scheduled(fixedDelay = 60000)

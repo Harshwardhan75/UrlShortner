@@ -75,7 +75,7 @@ public class UrlServiceImplementation implements UrlService {
 
         String agent = request.getHeader("User-Agent");
         boolean status = analyticsService.addAnalytics(url,agent);
-        System.out.println("Analytics Status***********: "+status);
+//        System.out.println("Analytics Status***********: "+status);
         String result = url.getOriginalUrl();
         return result;
     }
