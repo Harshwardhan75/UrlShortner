@@ -33,7 +33,7 @@ public class AccessController {
 
         if (url != null) {
             String originalurl = "https://" + url.getOriginalUrl();
-//            System.out.println("Cache Hit");
+            System.out.println("Cache Hit");
             String agent = request.getHeader("User-Agent");
             boolean status = analyticsService.addAnalytics(url, agent);
 //            System.out.println("Cache Hit Under: "+(System.currentTimeMillis()-start));
