@@ -6,7 +6,6 @@ import com.urlshortner.exception.ErrorsException;
 import com.urlshortner.services.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +34,7 @@ public class AuthController {
     }
 
     @PostMapping("/validateToken")
-    public ResponseEntity<?> validateToken(@RequestBody Map<String,Object> data) {
+    public ResponseEntity<?> validateToken(@RequestBody Map<String, Object> data) {
         return this.authService.validate(data.get("JWTToken").toString(), data.get("Email").toString());
     }
 

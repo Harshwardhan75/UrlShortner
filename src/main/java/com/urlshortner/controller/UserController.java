@@ -23,7 +23,7 @@ public class UserController {
 
     @PostMapping("/") //GetMapping he hai but frontend ke liye secured hai yeh
     public ResponseEntity<?> welcome(Principal principal){
-        System.out.println("Hello");
+//        System.out.println("Hello");
         return new ResponseEntity<>(userService.getUser(principal.getName()), HttpStatus.OK);
     }
 

@@ -1,6 +1,10 @@
 server:
   port: 8012
   address: 0.0.0.0
+  tomcat:
+    max-threads: 1000
+    accept-count: 2000
+
 spring:
   config:
     activate:
@@ -10,6 +14,11 @@ spring:
     username: root
     password: harshwardhan
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+    hikari:
+      maximum-pool-size: 50
+      minimum-idle: 50
+      connection-timeout: 30000
 
   jpa:
     hibernate:
@@ -23,6 +32,12 @@ spring:
     redis:
       host: localhost
       port: 6379
+      lettuce:
+        pool:
+          max-active: 200
+          max-idle: 200
+          min-idle: 50
+      timeout: 2000
 
   kafka:
     producer:
