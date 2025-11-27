@@ -16,14 +16,14 @@ public class UrlCache {
 
     private final String KEY = "URL";
     @Autowired
-    private RedisTemplate<String, URL> redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
     //  SAVE URL
-    public void cacheURL(URL url) {
+    public void cacheURL(String shortURL,String url) {
         try {
-            redisTemplate.opsForHash().put(KEY, url.getShortenUrl(), url);
+            redisTemplate.opsForHash().put(KEY, shortURL, url);
             redisTemplate.expire(KEY, 5, TimeUnit.MINUTES);
         } catch (Exception e) {
             logger.info("Error: {}",e.getMessage());
@@ -31,9 +31,10 @@ public class UrlCache {
     }
 
     //  GET URL
-    public URL getURL(String shortUrl) {
+    public String getURL(String shortUrl) {
         try {
-            URL url = (URL) redisTemplate.opsForHash().get(KEY,shortUrl);
+//            System.out.println("Redis Cache Hit");
+            String url = (String) redisTemplate.opsForHash().get(KEY,shortUrl);
             return url;
         }catch (Exception e){
             logger.info("Error: {}",e.getMessage());

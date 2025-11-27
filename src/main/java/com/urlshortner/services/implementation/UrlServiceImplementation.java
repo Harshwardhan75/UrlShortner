@@ -4,6 +4,7 @@ import com.urlshortner.entity.URL;
 import com.urlshortner.entity.User;
 import com.urlshortner.repository.URLRepository;
 import com.urlshortner.services.AnalyticsService;
+import com.urlshortner.services.CacheService;
 import com.urlshortner.services.RedisService;
 import com.urlshortner.services.UrlService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,8 +25,11 @@ public class UrlServiceImplementation implements UrlService {
     @Autowired
     private AnalyticsService analyticsService;
 
+//    @Autowired
+//    private RedisService redisService;
+
     @Autowired
-    private RedisService redisService;
+    private CacheService cacheService;
 
     @Override
     public URL addURL(String urlString, User user) {
@@ -62,7 +66,6 @@ public class UrlServiceImplementation implements UrlService {
 
     @Override
     public String originalURL(String shortURL, HttpServletRequest request){
-//        System.out.println("Harshwardhan:  "+shortURL);
         Base64.Decoder decoder = Base64.getUrlDecoder();
         byte[] decode = decoder.decode(shortURL);
         String[] urlArr = new String(decode).split(" ");
@@ -70,14 +73,12 @@ public class UrlServiceImplementation implements UrlService {
         if(!url.isActive()){
             return null;
         }
-
-        redisService.cacheURL(url);
+//        System.out.println("Database Hit");
+        cacheService.cacheURL(url.getShortenUrl(),url.getOriginalUrl()+"& &"+url.getUrlId());
 
         String agent = request.getHeader("User-Agent");
-        boolean status = analyticsService.addAnalytics(url,agent);
-//        System.out.println("Analytics Status***********: "+status);
-        String result = url.getOriginalUrl();
-        return result;
+        boolean status = analyticsService.addAnalytics(url.getUrlId().toString(),agent);
+        return url.getOriginalUrl();
     }
 
     @Override
@@ -89,7 +90,7 @@ public class UrlServiceImplementation implements UrlService {
     public boolean updateActive(Integer urlId, int value) {
         this.urlRepository.updateIsActive(urlId,value==0?false:true);
         if(value == 0){ //false hai redis cache se bhi nikalo bhai isse agar ho toh
-            redisService.deleteURL(urlRepository.getByIdOnlyShortUrl(urlId));
+            cacheService.deleteURL(urlRepository.getByIdOnlyShortUrl(urlId));
         }
         return true;
     }

@@ -13,7 +13,7 @@ public interface AnalyticsRepository extends JpaRepository<Analytics,Integer> {
 
     @Query("""
             select a from Analytics a
-            where a.url.urlId =:urlId
+            where a.urlId =:urlId
             """)
     List<Analytics> findAllByUrlId(@PathVariable int urlId);
 }

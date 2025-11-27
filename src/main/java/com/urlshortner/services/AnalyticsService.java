@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface AnalyticsService {
 
-    boolean addAnalytics(URL url,String device);
+    boolean addAnalytics(String urlId,String device);
 
     List<Analytics> getAnalytics(int urlId);
 

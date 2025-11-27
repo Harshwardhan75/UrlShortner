@@ -4,12 +4,15 @@ import com.urlshortner.entity.Analytics;
 import com.urlshortner.services.AnalyticsService;
 import com.urlshortner.services.KafkaService;
 import com.urlshortner.services.UrlService;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.kafka.support.Acknowledgment;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,14 +23,14 @@ public class KafkaServiceImplementation implements KafkaService {
     private final String topicName = "TOPIC-URL";
     private final List<Analytics> logs = new ArrayList<>();
     @Autowired
-    private KafkaTemplate<String, Analytics> kafkaTemplate;
+    private KafkaTemplate<String, String> kafkaTemplate;
     @Autowired
     private AnalyticsService analyticsService;
     @Autowired
     private UrlService urlService;
 
     @Override
-    public boolean push(Analytics analytics) {
+    public boolean push(String analytics) {
         try {
             kafkaTemplate.send(topicName, analytics);
             return true;
@@ -37,19 +40,26 @@ public class KafkaServiceImplementation implements KafkaService {
         }
     }
 
-    @KafkaListener(topics = topicName, groupId = "GROUP-1")
+    @KafkaListener(topics = topicName, groupId = "GROUP-1", containerFactory = "kafkaListenerContainerFactory")
     @Override
-    public void update(Analytics analytics) {
-//        URL url = analytics.getUrl();
-//        analytics = analyticsService.saveAnalytics(analytics);
-//        urlService.updateURL(analytics.getUrl().getUrlId());
-        logs.add(analytics);
-//        System.out.println(logs);
+    public void update(String messages) {
+        try {
+                String[] s = messages.split("& &");
+                Analytics analytics1 = new Analytics();
+                //        System.out.println(analytics);
+                analytics1.setAccessTime(LocalDateTime.parse(s[0]));
+                analytics1.setDevice(s[1]);
+                analytics1.setUrlId(Integer.parseInt(s[2]));
+
+                logs.add(analytics1);
+        } catch (Exception e) {
+
+        }
     }
 
-    @Scheduled(fixedDelay = 60000)
+    @Scheduled(fixedDelay = 60000*5)
     public void update() {
-        synchronized (logs) {
+        synchronized (logs){
             if(!logs.isEmpty())
                 analyticsService.batchUpdate(logs);
             logs.clear();

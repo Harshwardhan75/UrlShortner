@@ -22,8 +22,8 @@ public class Analytics {
     private LocalDateTime accessTime = LocalDateTime.now();
     private String device;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "urlId")
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "urlId")
 //    @JsonIgnore
-    private URL url;
+    private Integer urlId;
 }

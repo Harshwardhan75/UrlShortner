@@ -13,13 +13,13 @@ public class RedisServiceImplementation implements RedisService {
     private UrlCache urlCache;
 
     @Override
-    public void cacheURL(URL url) {
+    public void cacheURL(String shortURL,String url) {
 //        System.out.println("Updating Cache");
-        urlCache.cacheURL(url);
+        urlCache.cacheURL(shortURL,url);
     }
 
     @Override
-    public URL getURL(String shortURL) {
+    public String getURL(String shortURL) {
         return urlCache.getURL(shortURL);
     }
 

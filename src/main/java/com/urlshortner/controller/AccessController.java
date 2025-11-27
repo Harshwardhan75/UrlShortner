@@ -2,6 +2,7 @@ package com.urlshortner.controller;
 
 import com.urlshortner.entity.URL;
 import com.urlshortner.services.AnalyticsService;
+import com.urlshortner.services.CacheService;
 import com.urlshortner.services.RedisService;
 import com.urlshortner.services.UrlService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,8 +18,11 @@ public class AccessController {
     @Autowired
     private UrlService urlService;
 
+//    @Autowired
+//    private RedisService redisService;
+
     @Autowired
-    private RedisService redisService;
+    private CacheService cacheService;
 
     @Autowired
     private AnalyticsService analyticsService;
@@ -27,12 +31,13 @@ public class AccessController {
     @GetMapping("/{shortURL}")
 //    @ResponseBody
     public String redirectToOriginalURL(@PathVariable String shortURL, HttpServletRequest request) {
-        URL url = redisService.getURL("/shorten/" + shortURL);
+        String url = cacheService.getURL("/shorten/" + shortURL);
 
-        if (url != null) {
-            String originalurl = "https://" + url.getOriginalUrl();
+        if (url != null && !url.isEmpty()) {
+            String[] s = url.split("& &");
+            String originalurl = "https://"+s[0];
             String agent = request.getHeader("User-Agent");
-            boolean status = analyticsService.addAnalytics(url, agent);
+            boolean status = analyticsService.addAnalytics(s[1], agent);
             return "redirect:" + originalurl;
         }
         String originalURL = urlService.originalURL(shortURL, request);

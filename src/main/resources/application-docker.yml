@@ -2,9 +2,13 @@ server:
   port: 8012
   address: 0.0.0.0
   tomcat:
-    max-threads: 1000
+    threads:
+      max: 1000
+      min-spare: 50
     accept-count: 2000
 spring:
+  main:
+    allow-bean-definition-overriding: true
   datasource:
     url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DB}?createDatabaseIfNotExist=true
     username: ${MYSQL_USER}
@@ -12,7 +16,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
     hikari:
-      maximum-pool-size: 200
+      maximum-pool-size: 300
       minimum-idle: 50
       connection-timeout: 30000
   jpa:
@@ -29,29 +33,40 @@ spring:
       port: ${REDIS_PORT}
       lettuce:
         pool:
-          max-active: 200
-          max-idle: 200
-          min-idle: 50
+          enabled: true
+          max-active: 300
+          max-wait: 2000
+          max-idle: 50
+          min-idle: 20
       timeout: 2000
 
   kafka:
     producer:
       bootstrap-servers: ${KAFKA_BROKER}
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
     consumer:
       bootstrap-servers: ${KAFKA_BROKER}
       group-id: GROUP-1
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       properties:
         spring.json.trusted.packages: "*"
     listener:
       auto-startup: true
 
 topicName: ${KAFKA_TOPIC}
+IN_MEMORY_CACHE_SIZE: 12
 
-logging:
-  level:
-    root: error
+#logging:
+#  level:
+#    root: info
+#    org.springframework: debug
+#    org.hibernate.SQL: debug
+#    org.hibernate.type.descriptor.sql: trace
+#    org.apache.tomcat: debug
+#    com.zaxxer.hikari: debug
+#    org.apache.catalina.core: debug
+#    org.springframework.data.redis: debug
+#    org.apache.kafka: debug

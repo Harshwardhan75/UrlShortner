@@ -1,11 +1,15 @@
 server:
   port: 8012
-  address: 0.0.0.0
+#  address: 0.0.0.0
   tomcat:
-    max-threads: 1000
+    threads:
+      max: 1000
+      min-spare: 50
     accept-count: 2000
 
 spring:
+  main:
+    allow-bean-definition-overriding: true
   config:
     activate:
       on-profile: default
@@ -16,7 +20,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
     hikari:
-      maximum-pool-size: 50
+      maximum-pool-size: 300
       minimum-idle: 50
       connection-timeout: 30000
 
@@ -34,25 +38,40 @@ spring:
       port: 6379
       lettuce:
         pool:
-          max-active: 200
-          max-idle: 200
-          min-idle: 50
-      timeout: 2000
+          enabled: true
+          max-active: 1200
+          max-wait: 10000
+          max-idle: 1000
+          min-idle: 600
+      timeout: 10000
 
   kafka:
+    bootstrap-servers: localhost:9092
     producer:
       bootstrap-servers: localhost:9092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
     consumer:
       bootstrap-servers: localhost:9092
       group-id: GROUP-1
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       properties:
         spring.json.trusted.packages: "*"
     listener:
       auto-startup: true
 
 topicName: TOPIC-URL
+IN_MEMORY_CACHE_SIZE: 12
+#logging:
+#  level:
+#    root: warn
+#    org.springframework: debug
+#    org.hibernate.SQL: debug
+#    org.hibernate.type.descriptor.sql: trace
+#    org.apache.tomcat: info
+#    com.zaxxer.hikari: debug
+#    org.springframework.data.redis: debug
+#    org.apache.kafka: debug
+#    org.apache.catalina.core: debug

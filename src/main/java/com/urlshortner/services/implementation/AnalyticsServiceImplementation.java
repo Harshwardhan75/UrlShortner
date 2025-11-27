@@ -23,16 +23,16 @@ public class AnalyticsServiceImplementation implements AnalyticsService {
     private KafkaService kafkaService;
 
     @Override
-    public boolean addAnalytics(URL url, String agent) {
+    public boolean addAnalytics(String urlId, String agent) {
         String device = generateDevice(agent);
-        Analytics analytics = new Analytics();
-        analytics.setUrl(url);
-        analytics.setDevice(device);
-        analytics.setAccessTime(LocalDateTime.now());
+//        Analytics analytics = new Analytics();
+//        analytics.setUrlId(url.getUrlId());
+//        analytics.setDevice(device);
+//        analytics.setAccessTime(LocalDateTime.now());
 
-        boolean status = kafkaService.push(analytics);
-//        System.out.println("Kafka Producer Status***********: "+status);
-        return true;
+        String analytics = LocalDateTime.now()+"& &"+device+"& &"+urlId;
+
+        return kafkaService.push(analytics);
     }
 
     @Override
