@@ -152,7 +152,7 @@ Example:
 ---
 
 ## 🧠 System Architecture Overview
-
+```
 Client Request
      ↓
 Rate Limiter (Per User, Sliding Window)
@@ -167,7 +167,7 @@ Async Log
      → Kafka
      → Batch Consumer
      → Database
-
+```
 
 ---
 
