@@ -76,3 +76,122 @@ L2 Cache (Redis)
 Database
 ↓
 Update Redis → Update L1 (LRU)
+
+---
+
+## 🔹 User-Configurable Rate Limiting
+
+### Sliding Window Rate Limiting
+- Rate limiting applied **per user**
+- User can configure:
+  - Maximum allowed requests
+  - Time window duration
+- Implemented using **Sliding Window algorithm**
+- Prevents abuse and ensures fair usage
+
+Example:
+> A user can allow 100 requests per 60 seconds
+
+---
+
+### 🔹 Thread-Safe Rate Limiting
+- **Locking applied at individual user level**
+- No global locks → better scalability
+- Prevents race conditions under high concurrency
+- Ensures correctness even at **~4K req/sec**
+
+---
+
+## 🔹 Asynchronous Logging (Kafka-Based)
+- URL access logs are **not written synchronously**
+- Logs are published to **Kafka topics**
+- Keeps redirect path extremely fast
+- Avoids blocking I/O operations on critical path
+
+---
+
+## 🔹 Batch Database Updates
+- Kafka consumers **periodically batch log records**
+- Batch updates are written to database
+- Significantly reduces database write load
+- Improves throughput and overall system efficiency
+
+---
+
+## 🔹 Fault Tolerance & Data Reliability
+- Kafka ensures:
+  - Log data is preserved even if application crashes
+  - Safe replay and recovery of events
+- Prevents data loss during system failures
+- Enables resilient, event-driven architecture
+
+---
+
+## 🔹 High Throughput Design
+- Achieved **~4,000 requests/second**
+- Stateless backend architecture
+- Optimized read path
+- Async logging + caching
+
+---
+
+## 🔹 Dockerized Deployment
+- Application fully containerized using Docker
+- **Docker Compose** orchestrates:
+  - Spring Boot backend
+  - Redis cache
+  - Kafka broker
+- Enables production-like local environment
+
+---
+
+## 🔹 Health Check Endpoint
+- Lightweight health endpoint
+- Useful for monitoring and container orchestration
+
+---
+
+## 🧠 System Architecture Overview
+Client Request
+↓
+Rate Limiter (Per User, Sliding Window)
+↓
+L1 Cache (In-Memory, LRU)
+↓
+L2 Cache (Redis)
+↓
+Redirect Response
+↓
+Async Log → Kafka → Batch Consumer → Database
+
+---
+
+## 🧪 Performance Characteristics
+- **Throughput:** ~4,000 requests/sec
+- **Traffic Pattern:** Read-heavy, write-light
+- **Latency:** Minimal (async logging)
+- **Concurrency:** Thread-safe per-user locking
+- **Reliability:** Kafka-backed event persistence
+- **Scalability:** Stateless containers + Redis
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|-----|-----------|
+| Language | Java |
+| Framework | Spring Boot |
+| Build Tool | Maven |
+| Cache (L1) | In-Memory LRU Cache |
+| Cache (L2) | Redis |
+| Rate Limiting | Sliding Window Algorithm |
+| Concurrency | Per-User Locking |
+| Messaging | Kafka |
+| Logging | Async + Batch Processing |
+| Containerization | Docker |
+| Orchestration | Docker Compose |
+
+---
+
+## 📦 Project Structure
