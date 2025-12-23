@@ -67,15 +67,17 @@ This guarantees **uniqueness**, avoids collisions, and enables **fast primary-ke
 ---
 
 ### 🔁 Cache Lookup Flow
+```
 Request
-↓
+     ↓
 L1 Cache (In-Memory, LRU)
-↓ (miss)
+     ↓ (miss)
 L2 Cache (Redis)
-↓ (miss)
+     ↓ (miss)
 Database
-↓
+     ↓
 Update Redis → Update L1 (LRU)
+```
 
 ---
 
@@ -200,3 +202,29 @@ Async Log
 ---
 
 ## 📦 Project Structure
+```
+UrlShortner/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   └── resources/
+├── Dockerfile
+├── docker-compose.yml
+├── pom.xml
+├── mvnw
+└── README.md
+```
+
+## 🐳 Dockerized Deployment
+
+You can run the entire project using Docker Compose:
+
+```bash
+# Build Docker images
+docker compose build
+
+# Start all services in detached mode (background)
+docker compose up -d
+
+# To see logs (optional)
+docker compose logs -f
