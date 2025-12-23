@@ -37,3 +37,42 @@ USER_ID = 1
 
 Identifier = "1 1"
 Short Code = Base64("1 1")
+
+This guarantees **uniqueness**, avoids collisions, and enables **fast primary-key-based lookups**.
+
+---
+
+## ⚡ Caching Architecture (2-Level)
+
+### 🟢 L1 Cache – In-Memory (LRU Based)
+- Implemented inside JVM memory
+- Uses **LRU (Least Recently Used) eviction policy**
+- Stores hot / frequently accessed URLs
+- Automatically evicts least recently used entries
+- Provides ultra-fast access with zero network overhead
+
+**Why LRU?**
+- URL shorteners are read-heavy systems
+- Recently accessed URLs are more likely to be accessed again
+- LRU maximizes cache hit ratio and memory efficiency
+
+---
+
+### 🔵 L2 Cache – Redis (Distributed)
+- Acts as a fallback cache on L1 miss
+- Shared across multiple service instances
+- Supports horizontal scaling
+- Reduces database load
+
+---
+
+### 🔁 Cache Lookup Flow
+Request
+↓
+L1 Cache (In-Memory, LRU)
+↓ (miss)
+L2 Cache (Redis)
+↓ (miss)
+Database
+↓
+Update Redis → Update L1 (LRU)
