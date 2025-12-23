@@ -32,12 +32,13 @@ This project demonstrates **advanced backend engineering and system design conce
 - Identifier is encoded using **Base64 encoding**
 
 #### Example:
+```
 URL_ID = 1
 USER_ID = 1
 
 Identifier = "1 1"
 Short Code = Base64("1 1")
-
+```
 This guarantees **uniqueness**, avoids collisions, and enables **fast primary-key-based lookups**.
 
 ---
