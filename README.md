@@ -152,17 +152,22 @@ Example:
 ---
 
 ## 🧠 System Architecture Overview
+
 Client Request
-↓
+     ↓
 Rate Limiter (Per User, Sliding Window)
-↓
+     ↓
 L1 Cache (In-Memory, LRU)
-↓
+     ↓
 L2 Cache (Redis)
-↓
+     ↓
 Redirect Response
-↓
-Async Log → Kafka → Batch Consumer → Database
+     ↓
+Async Log
+     → Kafka
+     → Batch Consumer
+     → Database
+
 
 ---
 
